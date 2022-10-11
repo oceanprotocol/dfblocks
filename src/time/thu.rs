@@ -43,7 +43,7 @@ mod tests {
         let friday = chrono::DateTime::parse_from_rfc3339("2021-12-31T00:00:00Z")
             .unwrap()
             .with_timezone(&chrono::Utc);
-        let (start_ts, end_ts) = _get_thursday_timestamp(friday);
+        let (start_ts, end_ts) = _get_thursday_timestamp(friday).unwrap();
         assert_eq!(start_ts, 1640304000);
         assert_eq!(end_ts, 1640908800);
     }
