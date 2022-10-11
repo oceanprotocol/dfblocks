@@ -1,3 +1,4 @@
+use super::super::cache::redis;
 use serde_derive::{Deserialize, Serialize};
 
 static API_URL: &'static str = "https://blockfinder.snapshot.org/graphql";
@@ -22,6 +23,11 @@ pub async fn get_block_number_from_timestamp(
     chain_id: u64,
     timestamp: u64,
 ) -> Result<u64, Box<dyn std::error::Error>> {
+    let cache = redis::get_cache_blocks(timestamp);
+    if cache.is_ok() {
+        return cache;
+    }
+
     let query = format!(
         r#"
         {{"query":"query {{
@@ -45,8 +51,11 @@ pub async fn get_block_number_from_timestamp(
         .await?;
 
     let body = res.text().await?;
-    let response: ApiResponse = serde_json::from_str(&body)?;
-    return Ok(response.data.blocks[0].number);
+    let api_response: ApiResponse = serde_json::from_str(&body)?;
+    let resp = api_response.data.blocks[0].number;
+
+    redis::set_cache_blocks(timestamp, resp)?;
+    return Ok(resp);
 }
 
 // tests
