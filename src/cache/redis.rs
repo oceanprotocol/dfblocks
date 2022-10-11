@@ -1,7 +1,7 @@
 use redis::{self, Commands};
 
 pub fn get_client() -> redis::Client {
-    let redis_host = std::env::var("REDIS_HOST").unwrap_or("redis://redis".to_string());
+    let redis_host = std::env::var("REDIS_HOST").unwrap_or("redis://localhost/".to_string());
     redis::Client::open(redis_host).unwrap()
 }
 
