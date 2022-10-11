@@ -34,3 +34,17 @@ pub async fn getnumbers(
     Ok(numbers)
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_thursday_timestamp() {
+        let friday = chrono::DateTime::parse_from_rfc3339("2021-12-31T00:00:00Z")
+            .unwrap()
+            .with_timezone(&chrono::Utc);
+        let (start_ts, end_ts) = get_thursday_timestamp(friday);
+        assert_eq!(start_ts, 1640304000);
+        assert_eq!(end_ts, 1640908800);
+    }
+}
