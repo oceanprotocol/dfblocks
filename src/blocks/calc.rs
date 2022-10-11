@@ -1,3 +1,7 @@
+use chrono::{self, DateTime, Datelike, Utc};
+
+use super::api::get_block_number_from_timestamp;
+
 fn get_thursday_timestamp(now: DateTime<Utc>) -> (u64, u64) {
     let now = now.date().and_hms(0, 0, 0);
     let weekday = now.date().weekday().num_days_from_monday();
@@ -12,3 +16,21 @@ fn get_thursday_timestamp(now: DateTime<Utc>) -> (u64, u64) {
     let start_ts = end_ts - 604800;
     return (start_ts, end_ts);
 }
+
+pub async fn getnumbers(
+    chain_id: u64,
+    samples: u64,
+) -> Result<Vec<u64>, Box<dyn std::error::Error>> {
+    let now = Utc::now();
+    let (start_ts, end_ts) = get_thursday_timestamp(now);
+    let start = get_block_number_from_timestamp(chain_id, start_ts).await?;
+    let end = get_block_number_from_timestamp(chain_id, end_ts).await?;
+
+    let mut numbers = Vec::new();
+    let step = (end - start) / samples;
+    for i in 0..samples {
+        numbers.push(start + step * i);
+    }
+    Ok(numbers)
+}
+
