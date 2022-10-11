@@ -23,7 +23,7 @@ pub async fn get_block_number_from_timestamp(
     chain_id: u64,
     timestamp: u64,
 ) -> Result<u64, Box<dyn std::error::Error>> {
-    let cache = redis::get_cache_blocks(timestamp);
+    let cache = redis::get_cache_blocks(timestamp, chain_id);
     if cache.is_ok() {
         return cache;
     }
@@ -41,7 +41,7 @@ pub async fn get_block_number_from_timestamp(
     );
 
     // replace \n with empty string
-    let query = query.replace("\n", "");
+    let query = query.replace('\n', "");
     let client = reqwest::Client::new();
     let res = client
         .post(API_URL)
@@ -54,8 +54,8 @@ pub async fn get_block_number_from_timestamp(
     let api_response: ApiResponse = serde_json::from_str(&body)?;
     let resp = api_response.data.blocks[0].number;
 
-    redis::set_cache_blocks(timestamp, resp)?;
-    return Ok(resp);
+    redis::set_cache_blocks(timestamp, resp, chain_id)?;
+    Ok(resp)
 }
 
 // tests
