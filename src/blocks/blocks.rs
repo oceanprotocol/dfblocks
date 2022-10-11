@@ -11,6 +11,6 @@ pub async fn get_blocks_by_chain_and_ts(
     chain_id: u64,
     ts: u64,
 ) -> Result<Blocks, Box<dyn std::error::Error>> {
-    let ts = get_thursday_timestamp(ts);
+    let ts = get_thursday_timestamp(ts)?;
     getnumbers(chain_id, 50 as u64, ts).await
 }

@@ -20,16 +20,17 @@ pub fn get_thursday_timestamp_now() -> (u64, u64) {
     _get_thursday_timestamp(now)
 }
 
-pub fn get_thursday_timestamp(timestamp: u64) -> (u64, u64) {
+pub fn get_thursday_timestamp(timestamp: u64) -> Result<(u64, u64), Box<dyn std::error::Error>> {
     let now = DateTime::from_utc(
         chrono::NaiveDateTime::from_timestamp(timestamp as i64, 0),
         Utc,
     );
-    _get_thursday_timestamp(now)
-}
-
-pub fn now() -> DateTime<Utc> {
-    Utc::now()
+    // check if timestamp is in future
+    let now_ts = Utc::now().timestamp() as u64;
+    if timestamp > now_ts {
+        return Err("timestamp is in future".into());
+    }
+    Ok(_get_thursday_timestamp(now))
 }
 
 #[cfg(test)]
