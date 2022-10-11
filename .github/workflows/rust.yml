@@ -16,9 +16,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install redis
-        run: sudo apt-get install -y redis-server
+      run: sudo apt-get install -y redis-server
     - name: Run redis
-        run: redis-server --daemonize yes
+      run: redis-server --daemonize yes
     - name: Build
       run: cargo build --verbose
     - name: Run tests
