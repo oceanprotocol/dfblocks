@@ -9,8 +9,8 @@ pub async fn getnumbers(chain_id: u64, samples: u64) -> Result<Blocks, Box<dyn s
 
     let numbers = random_choose(start, end, samples);
     let response = Blocks {
-        ts_start: start_ts,
-        ts_end: end_ts,
+        start_ts,
+        end_ts,
         blocks: numbers,
     };
     Ok(response)
