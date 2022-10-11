@@ -1,35 +1,37 @@
 use chrono::{self, DateTime, Datelike, Utc};
 
-fn _get_thursday_timestamp(now: DateTime<Utc>) -> (u64, u64) {
-    let now = now.date().and_hms(0, 0, 0);
-    let weekday = now.date().weekday().num_days_from_monday();
+fn _get_thursday_timestamp(time: DateTime<Utc>) -> Result<(u64, u64), Box<dyn std::error::Error>> {
+    let time = time.date().and_hms(0, 0, 0);
+
+    let now_ts = Utc::now().timestamp() as u64;
+    if time.timestamp() as u64 > now_ts {
+        return Err("timestamp can't be in the future".into());
+    }
+
+    let weekday = time.date().weekday().num_days_from_monday();
     let end_ts: u64;
     if weekday == 4 {
-        end_ts = now.timestamp() as u64;
+        end_ts = time.timestamp() as u64;
     } else {
-        let last_thursday = now - chrono::Duration::days(weekday as i64 + 4);
+        let last_thursday = time - chrono::Duration::days(weekday as i64 + 4);
         end_ts = last_thursday.timestamp() as u64;
     }
 
     let start_ts = end_ts - 604800;
-    return (start_ts, end_ts);
+    return Ok((start_ts, end_ts));
 }
 
 pub fn get_thursday_timestamp_now() -> (u64, u64) {
     let now = Utc::now();
-    _get_thursday_timestamp(now)
+    _get_thursday_timestamp(now).unwrap()
 }
 
-pub fn get_thursday_timestamp(timestamp: u64) -> Result<(u64, u64), Box<dyn std::error::Error>> {
-    let now = DateTime::from_utc(
+pub fn get_thursday_timestamp_ts(timestamp: u64) -> Result<(u64, u64), Box<dyn std::error::Error>> {
+    let ts = DateTime::from_utc(
         chrono::NaiveDateTime::from_timestamp(timestamp as i64, 0),
         Utc,
     );
-    let now_ts = Utc::now().timestamp() as u64;
-    if timestamp > now_ts {
-        return Err("timestamp can't be in the future".into());
-    }
-    Ok(_get_thursday_timestamp(now))
+    _get_thursday_timestamp(ts)
 }
 
 #[cfg(test)]

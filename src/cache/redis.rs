@@ -9,7 +9,7 @@ pub fn get_cache(start_ts: u64) -> Result<Blocks, Box<dyn std::error::Error>> {
     let client = get_client();
     let mut con = client.get_connection().unwrap();
     let key = format!("blocks_{}", start_ts);
-    let cache: String = con.get(key).unwrap();
+    let cache: String = con.get(key)?;
     if cache.is_empty() {
         return Err("not found".into());
     }
