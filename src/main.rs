@@ -17,7 +17,7 @@ async fn handler_get_blocks_by_ts(req_body: web::Json<ApiRequest>) -> impl Respo
 
     match response {
         Ok(res) => HttpResponse::Ok().json(res),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
 

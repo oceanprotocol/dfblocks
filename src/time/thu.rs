@@ -25,10 +25,9 @@ pub fn get_thursday_timestamp(timestamp: u64) -> Result<(u64, u64), Box<dyn std:
         chrono::NaiveDateTime::from_timestamp(timestamp as i64, 0),
         Utc,
     );
-    // check if timestamp is in future
     let now_ts = Utc::now().timestamp() as u64;
     if timestamp > now_ts {
-        return Err("timestamp is in future".into());
+        return Err("timestamp can't be in the future".into());
     }
     Ok(_get_thursday_timestamp(now))
 }
