@@ -17,7 +17,6 @@ pub struct Block {
     network: String,
     number: u64,
 }
-struct Response {}
 
 fn get_block_number_from_timestamp(chain_id: u64, timestamp: u64) -> u64 {
     let query = format!(
