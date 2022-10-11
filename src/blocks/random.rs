@@ -11,7 +11,12 @@ pub fn random_choose(start: u64, end: u64, samples: u64) -> Vec<u64> {
     let range = Uniform::from(start..end);
     let mut numbers = Vec::new();
     for _ in 0..samples {
-        numbers.push(range.sample(&mut rng));
+        // check if exists
+        let number = range.sample(&mut rng);
+        if numbers.contains(&number) {
+            continue;
+        }
+        numbers.push(number);
     }
     numbers
 }
