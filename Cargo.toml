@@ -14,3 +14,4 @@ serde_derive = "1.0.145"
 chrono = "0.4"
 tokio = { version = "1.21.2", features = ["full"] }
 rand = "0.8.5"
+dotenv = "0.15.0"
