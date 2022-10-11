@@ -15,8 +15,16 @@ fn _get_thursday_timestamp(now: DateTime<Utc>) -> (u64, u64) {
     return (start_ts, end_ts);
 }
 
-pub fn get_thursday_timestamp() -> (u64, u64) {
+pub fn get_thursday_timestamp_now() -> (u64, u64) {
     let now = Utc::now();
+    _get_thursday_timestamp(now)
+}
+
+pub fn get_thursday_timestamp(timestamp: u64) -> (u64, u64) {
+    let now = DateTime::from_utc(
+        chrono::NaiveDateTime::from_timestamp(timestamp as i64, 0),
+        Utc,
+    );
     _get_thursday_timestamp(now)
 }
 
