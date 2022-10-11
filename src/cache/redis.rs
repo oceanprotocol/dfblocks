@@ -1,7 +1,8 @@
 use redis::{self, Commands};
 
 pub fn get_client() -> redis::Client {
-    redis::Client::open("redis://localhost/").unwrap()
+    let redis_host = std::env::var("REDIS_HOST").unwrap_or("redis".to_string());
+    redis::Client::open(redis_host).unwrap()
 }
 
 pub fn get_cache_blocks(ts: u64) -> Result<u64, Box<dyn std::error::Error>> {
