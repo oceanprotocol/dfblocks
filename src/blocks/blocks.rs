@@ -1,7 +1,5 @@
-pub fn get_blocks_by_chain(chain_id: u32) -> Vec<u32> {
-    let mut blocks = Vec::new();
-    for i in 0..10 {
-        blocks.push(i);
-    }
-    blocks
+use super::calc::getnumbers;
+
+pub async fn get_blocks_by_chain(chain_id: u64) -> Result<Vec<u64>, Box<dyn std::error::Error>> {
+    getnumbers(chain_id, 50 as u64).await
 }
