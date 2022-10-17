@@ -31,8 +31,12 @@ mod tests {
     fn test_random_choose() {
         let numbers = random_choose(1, 100, 10);
         assert_eq!(numbers.len(), 10);
+        let mut sorted = numbers.clone();
+        sorted.sort();
 
-        let sorted_numbers = numbers.sort();
-        assert_eq!(numbers.eq(sorted_numbers), true);
+        for n in 0..10 {
+            let n = n as usize;
+            assert!(numbers[n] == sorted[n]);
+        }
     }
 }
