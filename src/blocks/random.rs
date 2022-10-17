@@ -18,6 +18,8 @@ pub fn random_choose(start: u64, end: u64, samples: u64) -> Vec<u64> {
         }
         numbers.push(number);
     }
+    // sort numbers
+    numbers.sort();
     numbers
 }
 
@@ -29,5 +31,8 @@ mod tests {
     fn test_random_choose() {
         let numbers = random_choose(1, 100, 10);
         assert_eq!(numbers.len(), 10);
+
+        let sorted_numbers = numbers.sort();
+        assert_eq!(numbers.eq(sorted_numbers), true);
     }
 }
