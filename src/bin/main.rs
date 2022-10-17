@@ -36,12 +36,19 @@ async fn handler_get_blocks(path: web::Path<(u64, u64)>) -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+    let bind_port = std::env::var("BIND_PORT").unwrap_or("8080".to_string());
+    let bind_ip = std::env::var("BIND_IP").unwrap_or("127.0.0.1".to_string());
+
+    let bind_uri = format!("{}:{}", bind_ip, bind_port);
+
+    println!("Listening on: {}", bind_uri);
+
     HttpServer::new(|| {
         App::new()
             .service(handler_get_blocks)
             .service(handler_get_blocks_by_ts)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(bind_uri)?
     .run()
     .await
 }
